@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+
+    <title>Brain — All-Purpose AI</title>
+
+    <link rel="stylesheet" href="{% static 'brain/css/chat.css' %}">
+</head>
+
+<body>
+
+<div class="app-container">
+    <button
+    id="sidebarToggle"
+    class="sidebar-toggle"
+    type="button"
+    aria-label="باز و بسته کردن منو"
+    title="باز و بسته کردن منو"
+>
+    ☰
+</button>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+   
+
+        <div class="sidebar-header">
+
+            <div class="sidebar-logo">
+                <img
+                    src="{% static 'brain/images/brain-logo.jpg' %}"
+                    alt="Brain AI"
+                >
+            </div>
+
+            <div class="sidebar-brand">
+
+                <h2>Brain</h2>
+
+                <span>
+                    All-Purpose AI
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="newChatButton"
+            class="new-chat-button"
+            type="button"
+        >
+
+            <span>＋</span>
+
+            گفتگوی جدید
+
+        </button>
+
+
+        <div class="conversation-title">
+
+            گفتگوهای اخیر
+
+        </div>
+
+
+        <div
+            id="conversationList"
+            class="conversation-list"
+        >
+
+            <div class="loading-conversations">
+
+                در حال بارگذاری...
+
+            </div>
+
+        </div>
+
+
+        <div class="sidebar-footer">
+
+    <!-- Account Menu -->
+
+    <div
+        id="accountMenu"
+        class="account-menu"
+    >
+
+        <button
+            id="accountMenuButton"
+            class="account-menu-button"
+            type="button"
+            aria-expanded="false"
+        >
+
+            <div class="account-avatar" id="accountAvatar">
+                👤
+            </div>
+
+            <div class="account-summary">
+
+                <strong id="accountName">
+                    مهمان
+                </strong>
+
+                <span id="accountPlan">
+                    ۱۰ پیام روزانه
+                </span>
+
+            </div>
+
+            <span class="account-arrow">
+               ⌄
+            </span>
+
+        </button>
+
+
+        <!-- Dropdown -->
+
+        <div
+            id="accountDropdown"
+            class="account-dropdown"
+        >
+
+            <div class="account-dropdown-header">
+
+                <div
+                    class="account-dropdown-avatar"
+                    id="dropdownAvatar"
+                >
+                    👤
+                </div>
+
+                <div>
+
+                    <strong id="dropdownName">
+                        مهمان
+                    </strong>
+
+                    <span id="dropdownEmail">
+                        وارد حساب نشده‌اید
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="account-dropdown-divider"></div>
+
+
+            <!-- Authenticated -->
+
+            <div
+                id="authenticatedMenu"
+                class="account-menu-section"
+                style="display: none;"
+            >
+
+                <a
+                    href="/account/"
+                    class="account-menu-item"
+                >
+                    <span>👤</span>
+                    <span>حساب کاربری</span>
+                </a>
+
+                <a
+                    href="/account/"
+                    class="account-menu-item"
+                >
+                    <span>📊</span>
+                    <span>مصرف و اشتراک</span>
+                </a>
+
+                <button
+                    id="settingsMenuButton"
+                    class="account-menu-item account-menu-action"
+                    type="button"
+                >
+                    <span>⚙️</span>
+                    <span>تنظیمات</span>
+                </button>
+
+                <button
+                    id="securityMenuButton"
+                    class="account-menu-item account-menu-action"
+                    type="button"
+                >
+                    <span>🔐</span>
+                    <span>امنیت</span>
+                </button>
+
+                <div class="account-dropdown-divider"></div>
+
+                <button
+                    id="menuLogoutButton"
+                    class="account-menu-item logout-menu-item"
+                    type="button"
+                >
+                    <span>🚪</span>
+                    <span>خروج از حساب</span>
+                </button>
+
+            </div>
+
+
+            <!-- Guest -->
+
+            <div
+                id="guestMenu"
+                class="account-menu-section"
+            >
+
+                <a
+                    href="/login/"
+                    class="account-menu-item"
+                >
+                    <span>🔑</span>
+                    <span>ورود به حساب</span>
+                </a>
+
+                <a
+                    href="/register/"
+                    class="account-menu-item"
+                >
+                    <span>📝</span>
+                    <span>ثبت‌نام</span>
+                </a>
+
+                <a
+                    href="/account/"
+                    class="account-menu-item"
+                >
+                    <span>⚙️</span>
+                    <span>تنظیمات</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="version">
+        Brain V0.3.1
+    </div>
+
+</div>
+    </aside>
+
+
+    <!-- =========================
+         MAIN CHAT
+    ========================== -->
+
+    <main class="chat-container">
+
+
+        <!-- =========================
+             HEADER
+        ========================== -->
+
+        <header class="header">
+
+            <div class="brain-icon">
+
+                <img
+                    src="{% static 'brain/images/brain-logo.jpg' %}"
+                    alt="Brain"
+                >
+
+            </div>
+
+
+            <div class="header-text">
+
+                <h1>
+                    BRAIN
+                </h1>
+
+                <p>
+                    Smart AI for Real Conversations
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             MESSAGES
+        ========================== -->
+
+        <section id="messages" class="messages">
+    <div class="welcome-screen">
+        <div class="welcome-icon">
+            <img src="{% static 'brain/images/brain-logo.jpg' %}" alt="Brain">
+        </div>
+
+        <h2>سلام 👋</h2>
+
+        <p>
+            من <strong>Brain</strong> هستم.
+        </p>
+
+        <span>
+            آماده‌ام با شما گفتگو کنم، فکر کنم و به شما کمک کنم.
+        </span>
+    </div>
+</section>
+
+
+        <!-- =========================
+             INPUT
+        ========================== -->
+
+        <footer class="input-area">
+
+            <div class="input-box">
+
+                <textarea
+                    id="messageInput"
+                    placeholder="پیام خود را بنویسید..."
+                    rows="1"
+                ></textarea>
+
+
+                <!-- Voice Button -->
+
+                <button
+                    id="voiceButton"
+                    class="voice-button"
+                    type="button"
+                    aria-label="ضبط صدا"
+                    title="ضبط صدا"
+                >
+                    🎙️
+                </button>
+
+
+                <!-- Send Button -->
+
+                <button
+                    id="sendButton"
+                    type="button"
+                    aria-label="ارسال پیام"
+                    title="ارسال پیام"
+                >
+                    ➤
+                </button>
+
+            </div>
+
+
+            <div class="status">
+
+                All-Purpose AI • Brain V0.3.1
+
+            </div>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+<script src="{% static 'brain/js/chat.js' %}"></script>
+
+</body>
+
+</html>

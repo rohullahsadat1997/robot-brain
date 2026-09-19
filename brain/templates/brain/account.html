@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Account Center | Brain</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .page {
+            width: min(1100px, 94%);
+            margin: 35px auto;
+        }
+
+        /* Header */
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .back {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .back:hover {
+            background: #f3f4f6;
+        }
+
+        /* Profile */
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: #111827;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .profile-info h1 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        .profile-info p {
+            margin: 0 0 8px;
+            color: #6b7280;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #ecfdf5;
+            color: #047857;
+            font-size: 13px;
+        }
+
+        /* Grid */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h2 {
+            margin: 0 0 18px;
+            font-size: 19px;
+        }
+
+        .card-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        /* Info */
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #6b7280;
+        }
+
+        .value {
+            font-weight: 600;
+        }
+
+        /* Usage */
+
+        .usage-number {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #111827;
+            transition: width 0.4s ease;
+        }
+
+        .usage-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Buttons */
+
+        .button {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 10px;
+            background: #111827;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button-light {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .button-danger {
+            background: #dc2626;
+        }
+
+        .button + .button {
+            margin-right: 8px;
+        }
+
+        /* Guest */
+
+        .guest {
+            text-align: center;
+            padding: 25px;
+        }
+
+        .guest-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .guest h2 {
+            margin-bottom: 8px;
+        }
+
+        .guest p {
+            color: #6b7280;
+        }
+
+        /* Footer */
+
+        .footer {
+            text-align: center;
+            color: #9ca3af;
+            margin-top: 30px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile {
+                align-items: flex-start;
+            }
+
+            .topbar {
+                gap: 15px;
+            }
+
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <!-- Top Bar -->
+
+    <div class="topbar">
+
+        <div class="brand">
+            🧠 Brain
+        </div>
+
+        <a href="/" class="back">
+            ← بازگشت
+        </a>
+
+    </div>
+
+
+    <!-- Profile -->
+
+    <div class="profile-card" id="profileCard">
+
+        <div class="profile">
+
+            <div class="avatar" id="avatar">
+                ?
+            </div>
+
+            <div class="profile-info">
+
+                <h1 id="username">
+                    در حال بارگذاری...
+                </h1>
+
+                <p id="email">
+                    ...
+                </p>
+
+                <span class="status" id="accountStatus">
+                    در حال بررسی...
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Account Content -->
+
+    <div class="grid" id="accountContent">
+
+        <!-- Profile -->
+
+        <div class="card">
+
+            <h2>👤 پروفایل</h2>
+
+            <div class="info-row">
+                <span class="label">نام کاربری</span>
+                <span class="value" id="profileUsername">...</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">ایمیل</span>
+                <span class="value" id="profileEmail">...</span>
+            </div>
+
+            <div class="info-row">
+                <span class="label">شناسه کاربر</span>
+                <span class="value" id="profileId">...</span>
+            </div>
+
+        </div>
+
+
+        <!-- Usage -->
+
+        <div class="card">
+
+            <h2>📊 مصرف روزانه</h2>
+
+            <div class="usage-number" id="usageNumber">
+                ...
+            </div>
+
+            <div class="progress">
+
+                <div
+                    class="progress-bar"
+                    id="usageProgress">
+                </div>
+
+            </div>
+
+            <div class="usage-meta">
+
+                <span id="usageUsed">
+                    ...
+                </span>
+
+                <span id="usageLimit">
+                    ...
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Conversations -->
+
+        <div class="card">
+
+            <h2>💬 گفتگوهای من</h2>
+
+            <p class="card-description">
+                مدیریت و مشاهده گفتگوهای ذخیره‌شده شما.
+            </p>
+
+            <a href="/" class="button">
+                مشاهده گفتگوها
+            </a>
+
+        </div>
+
+
+        <!-- Settings -->
+
+        <div class="card">
+
+            <h2>⚙️ تنظیمات</h2>
+
+            <p class="card-description">
+                تنظیمات ظاهر، زبان، صدا و رفتار Brain.
+            </p>
+
+            <button
+                class="button button-light"
+                type="button"
+                disabled
+            >
+                به‌زودی
+            </button>
+
+        </div>
+
+
+        <!-- Security -->
+
+        <div class="card">
+
+            <h2>🔐 امنیت</h2>
+
+            <p class="card-description">
+                مدیریت امنیت و دسترسی حساب کاربری.
+            </p>
+
+            <button
+                class="button button-light"
+                type="button"
+                disabled
+            >
+                به‌زودی
+            </button>
+
+        </div>
+
+
+        <!-- Subscription -->
+
+        <div class="card">
+
+            <h2>💎 اشتراک</h2>
+
+            <div class="info-row">
+
+                <span class="label">
+                    پلن فعلی
+                </span>
+
+                <span
+                    class="value"
+                    id="subscriptionPlan">
+                    ...
+                </span>
+
+            </div>
+
+            <p class="card-description">
+                سیستم Premium و پرداخت در مرحله بعد اضافه می‌شود.
+            </p>
+
+            <button
+                class="button"
+                type="button"
+                disabled
+            >
+                ارتقا به Premium
+            </button>
+
+        </div>
+
+
+        <!-- Logout -->
+
+        <div class="card">
+
+            <h2>🚪 خروج از حساب</h2>
+
+            <p class="card-description">
+                خروج امن از حساب کاربری.
+            </p>
+
+            <button
+                id="logoutButton"
+                class="button button-danger"
+                type="button"
+            >
+                خروج از حساب
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        Brain V0.3.1
+    </div>
+
+</div>
+
+
+<script>
+
+async function loadAccount() {
+
+    try {
+
+        const response = await fetch(
+            "/api/auth/account/",
+            {
+                credentials: "same-origin"
+            }
+        );
+
+        const data = await response.json();
+
+
+        /* Guest */
+
+        if (response.status === 401) {
+
+            document.getElementById("username").textContent =
+                "مهمان";
+
+            document.getElementById("email").textContent =
+                "برای استفاده از امکانات حساب وارد شوید.";
+
+            document.getElementById("avatar").textContent =
+                "👤";
+
+            document.getElementById("accountStatus").textContent =
+                "مهمان";
+
+            document.getElementById("accountStatus").style.background =
+                "#f3f4f6";
+
+            document.getElementById("accountStatus").style.color =
+                "#4b5563";
+
+
+            document.getElementById("accountContent").innerHTML = `
+
+                <div class="card guest">
+
+                    <div class="guest-icon">
+                        👤
+                    </div>
+
+                    <h2>
+                        شما به عنوان مهمان وارد Brain شده‌اید
+                    </h2>
+
+                    <p>
+                        مهمان‌ها روزانه ۱۰ پیام دریافت می‌کنند.
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="/login/"
+                        class="button">
+                        ورود به حساب
+                    </a>
+
+                    <a
+                        href="/register/"
+                        class="button button-light">
+                        ثبت‌نام
+                    </a>
+
+                </div>
+
+                <div class="card">
+
+                    <h2>📊 مصرف روزانه</h2>
+
+                    <p class="card-description">
+                        محدودیت مهمان
+                    </p>
+
+                    <div class="usage-number">
+                        ۱۰ پیام
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        /* Other errors */
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "خطا در دریافت اطلاعات حساب"
+            );
+
+        }
+
+
+        /* Authenticated user */
+
+        const user = data.user;
+        const usage = data.usage;
+
+
+        document.getElementById("username").textContent =
+            user.username;
+
+        document.getElementById("email").textContent =
+            user.email || "ایمیل ثبت نشده";
+
+        document.getElementById("avatar").textContent =
+            user.username
+                .charAt(0)
+                .toUpperCase();
+
+        document.getElementById("accountStatus").textContent =
+            "حساب فعال";
+
+
+        document.getElementById("profileUsername").textContent =
+            user.username;
+
+        document.getElementById("profileEmail").textContent =
+            user.email || "ثبت نشده";
+
+        document.getElementById("profileId").textContent =
+            user.id;
+
+
+        /* Usage */
+
+        if (usage.limit === null) {
+
+            document.getElementById("usageNumber").textContent =
+                "نامحدود";
+
+            document.getElementById("usageUsed").textContent =
+                `${usage.daily_messages} پیام استفاده شده`;
+
+            document.getElementById("usageLimit").textContent =
+                "نامحدود";
+
+            document.getElementById("usageProgress").style.width =
+                "0%";
+
+        } else {
+
+            const used = usage.daily_messages;
+            const limit = usage.limit;
+            const remaining = usage.remaining;
+
+            const percentage =
+                Math.min(
+                    (used / limit) * 100,
+                    100
+                );
+
+            document.getElementById("usageNumber").textContent =
+                `${remaining} پیام باقی‌مانده`;
+
+            document.getElementById("usageUsed").textContent =
+                `${used} استفاده شده`;
+
+            document.getElementById("usageLimit").textContent =
+                `از ${limit}`;
+
+            document.getElementById("usageProgress").style.width =
+                `${percentage}%`;
+        }
+
+
+        /* Subscription */
+
+        document.getElementById("subscriptionPlan").textContent =
+            usage.plan;
+
+
+    } catch (error) {
+
+        console.error(
+            "Account error:",
+            error
+        );
+
+        document.getElementById("username").textContent =
+            "خطا";
+
+        document.getElementById("email").textContent =
+            error.message;
+
+    }
+
+}
+
+
+/* Logout */
+
+document
+    .getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        async function () {
+
+            try {
+
+                const response = await fetch(
+                    "/api/auth/logout/",
+                    {
+                        method: "POST",
+                        credentials: "same-origin"
+                    }
+                );
+
+                if (response.ok) {
+
+                    window.location.href = "/";
+
+                } else {
+
+                    const data =
+                        await response.json();
+
+                    alert(
+                        data.error ||
+                        "خروج از حساب انجام نشد."
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+
+loadAccount();
+
+</script>
+
+</body>
+</html>
