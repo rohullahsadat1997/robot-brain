@@ -1,53 +1,15 @@
+/* =========================================================
+   BRAIN — CHAT PAGE
+   V0.3.1
+   Self-contained JavaScript
+========================================================= */
+
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
 let remainingMessages = null;
-
-
-/* =========================================================
-   UPDATE REMAINING MESSAGES
-========================================================= */
-
-function updateRemainingMessages(count) {
-
-    remainingMessages = count;
-
-    let counter =
-        document.getElementById("remainingMessages");
-
-
-    if (!counter) {
-
-        counter = document.createElement("div");
-
-        counter.id = "remainingMessages";
-
-        counter.className = "remaining-messages";
-
-        document.body.appendChild(counter);
-
-    }
-
-
-    if (
-        count === null ||
-        count === undefined
-    ) {
-
-        counter.textContent =
-            "پیام‌های باقی‌مانده: نامحدود";
-
-        return;
-
-    }
-
-
-    counter.textContent =
-        `پیام‌های باقی‌مانده: ${count}`;
-
-}
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
 
 let conversationId = null;
 
@@ -65,25 +27,26 @@ let isRecording = false;
 const messageInput =
     document.getElementById("messageInput");
 
-
 const sendButton =
     document.getElementById("sendButton");
-
 
 const messagesContainer =
     document.getElementById("messages");
 
-
 const conversationList =
     document.getElementById("conversationList");
-
 
 const newChatButton =
     document.getElementById("newChatButton");
 
-
 const voiceButton =
     document.getElementById("voiceButton");
+
+const sidebarToggle =
+    document.getElementById("sidebarToggle");
+
+const appContainer =
+    document.querySelector(".app-container");
 
 
 /* =========================================================
@@ -93,72 +56,98 @@ const voiceButton =
 const accountMenu =
     document.getElementById("accountMenu");
 
-
 const accountMenuButton =
     document.getElementById("accountMenuButton");
-
 
 const accountDropdown =
     document.getElementById("accountDropdown");
 
-
 const accountAvatar =
     document.getElementById("accountAvatar");
-
 
 const accountName =
     document.getElementById("accountName");
 
-
 const accountPlan =
     document.getElementById("accountPlan");
-
 
 const dropdownAvatar =
     document.getElementById("dropdownAvatar");
 
-
 const dropdownName =
     document.getElementById("dropdownName");
-
 
 const dropdownEmail =
     document.getElementById("dropdownEmail");
 
-
 const authenticatedMenu =
     document.getElementById("authenticatedMenu");
 
-
 const guestMenu =
     document.getElementById("guestMenu");
-
 
 const menuLogoutButton =
     document.getElementById("menuLogoutButton");
 
 
 /* =========================================================
-   ACCOUNT MENU
+   UPDATE REMAINING MESSAGES
 ========================================================= */
 
+function updateRemainingMessages(count) {
 
-/*
-    باز و بسته کردن منوی حساب
-*/
+    remainingMessages = count;
 
-function toggleAccountMenu() {
+    let counter =
+        document.getElementById(
+            "remainingMessages"
+        );
 
-    if (!accountMenu) {
+    if (!counter) {
+
+        counter =
+            document.createElement("div");
+
+        counter.id =
+            "remainingMessages";
+
+        counter.className =
+            "remaining-messages";
+
+        document.body.appendChild(counter);
+
+    }
+
+    if (
+        count === null ||
+        count === undefined
+    ) {
+
+        counter.textContent =
+            "پیام‌های باقی‌مانده: نامحدود";
 
         return;
 
     }
 
+    counter.textContent =
+        `پیام‌های باقی‌مانده: ${count}`;
+
+}
+
+
+/* =========================================================
+   ACCOUNT MENU
+========================================================= */
+
+function toggleAccountMenu() {
+
+    if (!accountMenu) {
+        return;
+    }
 
     const isOpen =
         accountMenu.classList.contains("open");
-
 
     if (isOpen) {
 
@@ -173,21 +162,13 @@ function toggleAccountMenu() {
 }
 
 
-/*
-    باز کردن
-*/
-
 function openAccountMenu() {
 
     if (!accountMenu) {
-
         return;
-
     }
 
-
     accountMenu.classList.add("open");
-
 
     if (accountMenuButton) {
 
@@ -201,21 +182,13 @@ function openAccountMenu() {
 }
 
 
-/*
-    بستن
-*/
-
 function closeAccountMenu() {
 
     if (!accountMenu) {
-
         return;
-
     }
 
-
     accountMenu.classList.remove("open");
-
 
     if (accountMenuButton) {
 
@@ -229,15 +202,17 @@ function closeAccountMenu() {
 }
 
 
-/*
-    کلیک روی Account
-*/
+/* =========================================================
+   ACCOUNT MENU EVENTS
+========================================================= */
 
 if (accountMenuButton) {
 
     accountMenuButton.addEventListener(
         "click",
         function(event) {
+
+            event.preventDefault();
 
             event.stopPropagation();
 
@@ -248,11 +223,6 @@ if (accountMenuButton) {
 
 }
 
-
-/*
-    جلوگیری از بسته شدن هنگام کلیک
-    داخل خود Dropdown
-*/
 
 if (accountDropdown) {
 
@@ -268,15 +238,23 @@ if (accountDropdown) {
 }
 
 
-/*
-    کلیک بیرون منو
-*/
-
 document.addEventListener(
     "click",
-    function() {
+    function(event) {
 
-        closeAccountMenu();
+        if (!accountMenu) {
+            return;
+        }
+
+        if (
+            !accountMenu.contains(
+                event.target
+            )
+        ) {
+
+            closeAccountMenu();
+
+        }
 
     }
 );
@@ -289,17 +267,13 @@ document.addEventListener(
 function updateAccountUI(data) {
 
     if (!data) {
-
         return;
-
     }
 
 
-    /*
-        =========================
-        GUEST
-        =========================
-    */
+    /* -----------------------------------------------------
+       GUEST
+    ----------------------------------------------------- */
 
     if (
         !data.authenticated ||
@@ -313,14 +287,12 @@ function updateAccountUI(data) {
 
         }
 
-
         if (accountPlan) {
 
             accountPlan.textContent =
                 "۱۰ پیام در روز";
 
         }
-
 
         if (dropdownName) {
 
@@ -329,14 +301,12 @@ function updateAccountUI(data) {
 
         }
 
-
         if (dropdownEmail) {
 
             dropdownEmail.textContent =
                 "وارد حساب نشده‌اید";
 
         }
-
 
         if (authenticatedMenu) {
 
@@ -345,7 +315,6 @@ function updateAccountUI(data) {
 
         }
 
-
         if (guestMenu) {
 
             guestMenu.style.display =
@@ -353,17 +322,14 @@ function updateAccountUI(data) {
 
         }
 
-
         return;
 
     }
 
 
-    /*
-        =========================
-        AUTHENTICATED USER
-        =========================
-    */
+    /* -----------------------------------------------------
+       AUTHENTICATED USER
+    ----------------------------------------------------- */
 
     const user =
         data.user;
@@ -388,22 +354,20 @@ function updateAccountUI(data) {
     if (dropdownEmail) {
 
         dropdownEmail.textContent =
-            user.email || "ایمیل ثبت نشده";
+            user.email ||
+            "ایمیل ثبت نشده";
 
     }
 
 
-    /*
-        برنامه / سهمیه
-    */
+    /* -----------------------------------------------------
+       PLAN / USAGE
+    ----------------------------------------------------- */
 
-    if (
-        data.usage
-    ) {
+    if (data.usage) {
 
         const plan =
             data.usage.plan;
-
 
         const remaining =
             data.usage.remaining;
@@ -455,10 +419,6 @@ function updateAccountUI(data) {
         }
 
 
-        /*
-            بروزرسانی شمارنده اصلی
-        */
-
         if (
             remaining !== null &&
             remaining !== undefined
@@ -482,9 +442,9 @@ function updateAccountUI(data) {
     }
 
 
-    /*
-        نمایش منوی کاربر
-    */
+    /* -----------------------------------------------------
+       SHOW AUTHENTICATED MENU
+    ----------------------------------------------------- */
 
     if (authenticatedMenu) {
 
@@ -512,19 +472,17 @@ async function loadAccountStatus() {
 
     try {
 
-        /*
-            اول API اصلی وضعیت ورود
-        */
-
         const response =
             await fetch(
                 "/api/auth/me/",
                 {
                     method: "GET",
 
-                    credentials: "same-origin",
+                    credentials:
+                        "same-origin",
 
-                    cache: "no-store"
+                    cache:
+                        "no-store"
                 }
             );
 
@@ -533,19 +491,14 @@ async function loadAccountStatus() {
             await response.json();
 
 
-        /*
-            وضعیت اولیه حساب
-        */
-
         updateAccountUI(
             data
         );
 
 
-        /*
-            اگر کاربر لاگین بود،
-            اطلاعات کامل Account را هم بگیر
-        */
+        /* -------------------------------------------------
+           LOAD FULL ACCOUNT DATA
+        ------------------------------------------------- */
 
         if (
             data.authenticated &&
@@ -560,9 +513,11 @@ async function loadAccountStatus() {
                         {
                             method: "GET",
 
-                            credentials: "same-origin",
+                            credentials:
+                                "same-origin",
 
-                            cache: "no-store"
+                            cache:
+                                "no-store"
                         }
                     );
 
@@ -592,7 +547,6 @@ async function loadAccountStatus() {
 
         }
 
-
     } catch (error) {
 
         console.error(
@@ -600,11 +554,6 @@ async function loadAccountStatus() {
             error
         );
 
-
-        /*
-            اگر API در دسترس نبود،
-            حساب را اشتباهاً لاگین‌شده نشان نده
-        */
 
         updateAccountUI({
             authenticated: false,
@@ -623,15 +572,9 @@ async function loadAccountStatus() {
 async function logoutUser() {
 
     if (!menuLogoutButton) {
-
         return;
-
     }
 
-
-    /*
-        جلوگیری از چند کلیک
-    */
 
     menuLogoutButton.disabled =
         true;
@@ -645,7 +588,8 @@ async function logoutUser() {
                 {
                     method: "POST",
 
-                    credentials: "same-origin",
+                    credentials:
+                        "same-origin",
 
                     headers: {
                         "X-Requested-With":
@@ -678,16 +622,8 @@ async function logoutUser() {
         }
 
 
-        /*
-            بستن منو
-        */
-
         closeAccountMenu();
 
-
-        /*
-            پاک کردن وضعیت فعلی
-        */
 
         updateAccountUI({
             authenticated: false,
@@ -695,13 +631,7 @@ async function logoutUser() {
         });
 
 
-        /*
-            صفحه را دوباره بارگذاری می‌کنیم
-            تا Session جدید کاملاً اعمال شود.
-        */
-
         window.location.reload();
-
 
     } catch (error) {
 
@@ -715,7 +645,6 @@ async function logoutUser() {
             "خطایی هنگام خروج از حساب رخ داد."
         );
 
-
     } finally {
 
         menuLogoutButton.disabled =
@@ -725,10 +654,6 @@ async function logoutUser() {
 
 }
 
-
-/*
-    دکمه خروج داخل منوی Account
-*/
 
 if (menuLogoutButton) {
 
@@ -746,7 +671,17 @@ if (menuLogoutButton) {
 
 function formatMessage(text) {
 
-    return text
+    if (
+        text === null ||
+        text === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(text)
 
         .replace(
             /&/g,
@@ -785,12 +720,17 @@ function addMessage(
     text
 ) {
 
+    if (!messagesContainer) {
+        return;
+    }
+
+
     const message =
         document.createElement("div");
 
 
     message.className =
-        "message " + role;
+        `message ${role}`;
 
 
     const bubble =
@@ -815,17 +755,31 @@ function addMessage(
     );
 
 
-    messagesContainer.scrollTop =
-        messagesContainer.scrollHeight;
+    requestAnimationFrame(
+        function() {
+
+            messagesContainer.scrollTop =
+                messagesContainer.scrollHeight;
+
+        }
+    );
 
 }
 
 
 /* =========================================================
-   TYPING
+   TYPING MESSAGE
 ========================================================= */
 
 function addTypingMessage() {
+
+    if (!messagesContainer) {
+        return;
+    }
+
+
+    removeTypingMessage();
+
 
     const message =
         document.createElement("div");
@@ -890,13 +844,22 @@ function removeTypingMessage() {
 
 async function loadConversations() {
 
+    if (!conversationList) {
+        return;
+    }
+
+
     try {
 
         const response =
             await fetch(
                 "/api/conversations/",
                 {
-                    credentials: "same-origin"
+                    credentials:
+                        "same-origin",
+
+                    cache:
+                        "no-store"
                 }
             );
 
@@ -916,13 +879,16 @@ async function loadConversations() {
 
 
         renderConversations(
-            data.conversations
+            data.conversations || []
         );
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Load conversations error:",
+            error
+        );
 
 
         conversationList.innerHTML = `
@@ -944,11 +910,19 @@ function renderConversations(
     conversations
 ) {
 
+    if (!conversationList) {
+        return;
+    }
+
+
     conversationList.innerHTML =
         "";
 
 
-    if (!conversations.length) {
+    if (
+        !conversations ||
+        !conversations.length
+    ) {
 
         conversationList.innerHTML = `
             <div class="loading-conversations">
@@ -962,7 +936,7 @@ function renderConversations(
 
 
     conversations.forEach(
-        conversation => {
+        function(conversation) {
 
             const item =
                 document.createElement("div");
@@ -973,8 +947,8 @@ function renderConversations(
 
 
             if (
-                conversation.id ===
-                conversationId
+                Number(conversation.id) ===
+                Number(conversationId)
             ) {
 
                 item.classList.add(
@@ -994,7 +968,8 @@ function renderConversations(
 
                     <div class="conversation-item-title">
                         ${escapeHtml(
-                            conversation.title
+                            conversation.title ||
+                            "گفتگوی جدید"
                         )}
                     </div>
 
@@ -1010,6 +985,7 @@ function renderConversations(
                 <button
                     class="delete-conversation-btn"
                     title="حذف گفتگو"
+                    aria-label="حذف گفتگو"
                     type="button"
                 >
                     🗑
@@ -1018,15 +994,21 @@ function renderConversations(
             `;
 
 
-            /*
-                باز کردن گفتگو
-            */
-
-            item
-                .querySelector(
+            const content =
+                item.querySelector(
                     ".conversation-item-content"
-                )
-                .addEventListener(
+                );
+
+
+            const deleteButton =
+                item.querySelector(
+                    ".delete-conversation-btn"
+                );
+
+
+            if (content) {
+
+                content.addEventListener(
                     "click",
                     function() {
 
@@ -1037,18 +1019,16 @@ function renderConversations(
                     }
                 );
 
+            }
 
-            /*
-                حذف گفتگو
-            */
 
-            item
-                .querySelector(
-                    ".delete-conversation-btn"
-                )
-                .addEventListener(
+            if (deleteButton) {
+
+                deleteButton.addEventListener(
                     "click",
                     function(event) {
+
+                        event.preventDefault();
 
                         event.stopPropagation();
 
@@ -1059,6 +1039,8 @@ function renderConversations(
 
                     }
                 );
+
+            }
 
 
             conversationList.appendChild(
@@ -1086,9 +1068,7 @@ async function deleteConversation(
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
@@ -1100,7 +1080,8 @@ async function deleteConversation(
                 {
                     method: "DELETE",
 
-                    credentials: "same-origin"
+                    credentials:
+                        "same-origin"
                 }
             );
 
@@ -1121,12 +1102,9 @@ async function deleteConversation(
         }
 
 
-        /*
-            اگر همین گفتگوی فعلی حذف شده
-        */
-
         if (
-            conversationId === id
+            Number(conversationId) ===
+            Number(id)
         ) {
 
             startNewChat();
@@ -1134,11 +1112,7 @@ async function deleteConversation(
         }
 
 
-        /*
-            بارگذاری مجدد لیست
-        */
-
-        loadConversations();
+        await loadConversations();
 
 
     } catch (error) {
@@ -1185,10 +1159,15 @@ async function openConversation(
     id
 ) {
 
+    if (!messagesContainer) {
+        return;
+    }
+
+
     try {
 
         conversationId =
-            id;
+            Number(id);
 
 
         messagesContainer.innerHTML = `
@@ -1208,9 +1187,17 @@ async function openConversation(
         renderConversationsAfterSelection();
 
 
+        closeMobileSidebar();
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Open conversation error:",
+            error
+        );
+
+
+        removeTypingMessage();
 
 
         addMessage(
@@ -1235,7 +1222,11 @@ async function loadConversationFromServer(
         await fetch(
             `/api/conversations/${id}/`,
             {
-                credentials: "same-origin"
+                credentials:
+                    "same-origin",
+
+                cache:
+                    "no-store"
             }
         );
 
@@ -1258,7 +1249,10 @@ async function loadConversationFromServer(
         "";
 
 
-    if (!data.messages.length) {
+    if (
+        !data.messages ||
+        !data.messages.length
+    ) {
 
         addMessage(
             "assistant",
@@ -1271,7 +1265,7 @@ async function loadConversationFromServer(
 
 
     data.messages.forEach(
-        message => {
+        function(message) {
 
             addMessage(
                 message.role,
@@ -1289,7 +1283,7 @@ async function loadConversationFromServer(
 
 
 /* =========================================================
-   REFRESH ACTIVE ITEM
+   REFRESH ACTIVE CONVERSATION
 ========================================================= */
 
 function renderConversationsAfterSelection() {
@@ -1301,7 +1295,7 @@ function renderConversationsAfterSelection() {
 
 
     items.forEach(
-        item => {
+        function(item) {
 
             const id =
                 Number(
@@ -1310,7 +1304,8 @@ function renderConversationsAfterSelection() {
 
 
             if (
-                id === conversationId
+                id ===
+                Number(conversationId)
             ) {
 
                 item.classList.add(
@@ -1341,37 +1336,58 @@ function startNewChat() {
         null;
 
 
-    messagesContainer.innerHTML = `
-        <div class="message assistant">
+    if (messagesContainer) {
 
-            <div class="bubble">
+        messagesContainer.innerHTML = `
+            <div class="welcome-screen">
 
-                <strong>
+                <div class="welcome-icon">
+                    <img
+                        src="/static/brain/images/brain-logo.jpg"
+                        alt="Brain"
+                    >
+                </div>
+
+                <h2>
                     سلام 👋
-                </strong>
+                </h2>
 
-                <br>
+                <p>
+                    من <strong>Brain</strong> هستم.
+                </p>
 
-                من Brain هستم.
-
-                <br>
-
-                آماده‌ام با شما گفتگو کنم.
+                <span>
+                    آماده‌ام با شما گفتگو کنم، فکر کنم و به شما کمک کنم.
+                </span>
 
             </div>
+        `;
 
-        </div>
-    `;
+    }
 
 
     renderConversationsAfterSelection();
 
 
-    messageInput.value =
-        "";
+    if (messageInput) {
+
+        messageInput.value =
+            "";
+
+        messageInput.style.height =
+            "auto";
+
+    }
 
 
-    messageInput.focus();
+    closeMobileSidebar();
+
+
+    if (messageInput) {
+
+        messageInput.focus();
+
+    }
 
 }
 
@@ -1382,14 +1398,17 @@ function startNewChat() {
 
 async function sendMessage() {
 
+    if (!messageInput) {
+        return;
+    }
+
+
     const message =
         messageInput.value.trim();
 
 
     if (!message) {
-
         return;
-
     }
 
 
@@ -1407,8 +1426,12 @@ async function sendMessage() {
         "auto";
 
 
-    sendButton.disabled =
-        true;
+    if (sendButton) {
+
+        sendButton.disabled =
+            true;
+
+    }
 
 
     addTypingMessage();
@@ -1417,10 +1440,7 @@ async function sendMessage() {
     try {
 
         const body = {
-
-            message:
-                message
-
+            message: message
         };
 
 
@@ -1445,7 +1465,8 @@ async function sendMessage() {
                             "application/json"
                     },
 
-                    credentials: "same-origin",
+                    credentials:
+                        "same-origin",
 
                     body:
                         JSON.stringify(body)
@@ -1475,7 +1496,9 @@ async function sendMessage() {
             );
 
 
-            console.error(data);
+            console.error(
+                data
+            );
 
 
             return;
@@ -1487,12 +1510,9 @@ async function sendMessage() {
             data.conversation_id;
 
 
-        /*
-            تعداد پیام‌های باقی‌مانده
-        */
-
         if (
-            data.remaining_messages !== undefined
+            data.remaining_messages !==
+            undefined
         ) {
 
             updateRemainingMessages(
@@ -1502,19 +1522,18 @@ async function sendMessage() {
         }
 
 
-        /*
-            پاسخ Brain
-        */
-
-        addMessage(
-            "assistant",
+        if (
+            data.assistant_message &&
             data.assistant_message.content
-        );
+        ) {
 
+            addMessage(
+                "assistant",
+                data.assistant_message.content
+            );
 
-        /*
-            بروزرسانی گفتگوها
-        */
+        }
+
 
         await loadConversations();
 
@@ -1527,19 +1546,26 @@ async function sendMessage() {
         removeTypingMessage();
 
 
+        console.error(
+            "Send message error:",
+            error
+        );
+
+
         addMessage(
             "assistant",
             "ارتباط با سرور برقرار نشد."
         );
 
 
-        console.error(error);
-
-
     } finally {
 
-        sendButton.disabled =
-            false;
+        if (sendButton) {
+
+            sendButton.disabled =
+                false;
+
+        }
 
 
         messageInput.focus();
@@ -1573,6 +1599,11 @@ async function toggleVoiceRecording() {
 ========================================================= */
 
 async function startVoiceRecording() {
+
+    if (!voiceButton) {
+        return;
+    }
+
 
     try {
 
@@ -1632,8 +1663,11 @@ async function startVoiceRecording() {
                 stream
                     .getTracks()
                     .forEach(
-                        track =>
-                            track.stop()
+                        function(track) {
+
+                            track.stop();
+
+                        }
                     );
 
 
@@ -1663,13 +1697,22 @@ async function startVoiceRecording() {
             "توقف ضبط";
 
 
+        voiceButton.setAttribute(
+            "aria-label",
+            "توقف ضبط"
+        );
+
+
         messageInput.placeholder =
             "در حال ضبط صدا...";
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Microphone error:",
+            error
+        );
 
 
         addMessage(
@@ -1689,9 +1732,7 @@ async function startVoiceRecording() {
 function stopVoiceRecording() {
 
     if (!mediaRecorder) {
-
         return;
-
     }
 
 
@@ -1709,21 +1750,35 @@ function stopVoiceRecording() {
         false;
 
 
-    voiceButton.classList.remove(
-        "recording"
-    );
+    if (voiceButton) {
+
+        voiceButton.classList.remove(
+            "recording"
+        );
 
 
-    voiceButton.textContent =
-        "🎙️";
+        voiceButton.textContent =
+            "🎙️";
 
 
-    voiceButton.title =
-        "ضبط صدا";
+        voiceButton.title =
+            "ضبط صدا";
 
 
-    messageInput.placeholder =
-        "پیام خود را بنویسید...";
+        voiceButton.setAttribute(
+            "aria-label",
+            "ضبط صدا"
+        );
+
+    }
+
+
+    if (messageInput) {
+
+        messageInput.placeholder =
+            "پیام خود را بنویسید...";
+
+    }
 
 }
 
@@ -1735,19 +1790,22 @@ function stopVoiceRecording() {
 async function sendRecordedAudio() {
 
     if (!audioChunks.length) {
-
         return;
-
     }
+
+
+    const mimeType =
+        mediaRecorder &&
+        mediaRecorder.mimeType
+            ? mediaRecorder.mimeType
+            : "audio/webm";
 
 
     const audioBlob =
         new Blob(
             audioChunks,
             {
-                type:
-                    mediaRecorder.mimeType ||
-                    "audio/webm"
+                type: mimeType
             }
         );
 
@@ -1763,10 +1821,6 @@ async function sendRecordedAudio() {
     );
 
 
-    /*
-        ارسال conversation_id
-    */
-
     if (
         conversationId !== null
     ) {
@@ -1779,25 +1833,21 @@ async function sendRecordedAudio() {
     }
 
 
-    /*
-        پیام صوتی کاربر
-    */
-
     addMessage(
         "user",
         "🎙️ پیام صوتی"
     );
 
 
-    /*
-        حالت پردازش
-    */
-
     addTypingMessage();
 
 
-    voiceButton.disabled =
-        true;
+    if (voiceButton) {
+
+        voiceButton.disabled =
+            true;
+
+    }
 
 
     try {
@@ -1808,9 +1858,11 @@ async function sendRecordedAudio() {
                 {
                     method: "POST",
 
-                    credentials: "same-origin",
+                    credentials:
+                        "same-origin",
 
-                    body: formData
+                    body:
+                        formData
                 }
             );
 
@@ -1819,16 +1871,8 @@ async function sendRecordedAudio() {
             await response.json();
 
 
-        /*
-            حذف typing
-        */
-
         removeTypingMessage();
 
-
-        /*
-            بررسی خطا
-        */
 
         if (!response.ok) {
 
@@ -1850,20 +1894,13 @@ async function sendRecordedAudio() {
         }
 
 
-        /*
-            ذخیره conversation
-        */
-
         conversationId =
             data.conversation_id;
 
 
-        /*
-            تعداد پیام‌های باقی‌مانده
-        */
-
         if (
-            data.remaining_messages !== undefined
+            data.remaining_messages !==
+            undefined
         ) {
 
             updateRemainingMessages(
@@ -1872,10 +1909,6 @@ async function sendRecordedAudio() {
 
         }
 
-
-        /*
-            متن تشخیص داده شده
-        */
 
         if (
             data.transcript
@@ -1889,10 +1922,6 @@ async function sendRecordedAudio() {
         }
 
 
-        /*
-            پاسخ Brain
-        */
-
         if (
             data.assistant_message &&
             data.assistant_message.content
@@ -1905,10 +1934,6 @@ async function sendRecordedAudio() {
 
         }
 
-
-        /*
-            بروزرسانی گفتگوها
-        */
 
         await loadConversations();
 
@@ -1935,8 +1960,12 @@ async function sendRecordedAudio() {
 
     } finally {
 
-        voiceButton.disabled =
-            false;
+        if (voiceButton) {
+
+            voiceButton.disabled =
+                false;
+
+        }
 
 
         audioChunks =
@@ -1945,6 +1974,191 @@ async function sendRecordedAudio() {
     }
 
 }
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function toggleSidebar() {
+
+    if (!appContainer) {
+        return;
+    }
+
+
+    appContainer.classList.toggle(
+        "sidebar-collapsed"
+    );
+
+}
+
+
+function closeMobileSidebar() {
+
+    if (!appContainer) {
+        return;
+    }
+
+
+    if (
+        window.innerWidth <= 768
+    ) {
+
+        appContainer.classList.add(
+            "sidebar-collapsed"
+        );
+
+    }
+
+}
+
+
+function openMobileSidebar() {
+
+    if (!appContainer) {
+        return;
+    }
+
+
+    if (
+        window.innerWidth <= 768
+    ) {
+
+        appContainer.classList.remove(
+            "sidebar-collapsed"
+        );
+
+    }
+
+}
+
+
+if (
+    sidebarToggle &&
+    appContainer
+) {
+
+    sidebarToggle.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            toggleSidebar();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE MOBILE SIDEBAR WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (!appContainer) {
+            return;
+        }
+
+
+        if (
+            window.innerWidth > 768
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            appContainer.classList.contains(
+                "sidebar-collapsed"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        const sidebar =
+            document.querySelector(
+                ".sidebar"
+            );
+
+
+        if (!sidebar) {
+            return;
+        }
+
+
+        if (
+            sidebar.contains(
+                event.target
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            sidebarToggle &&
+            sidebarToggle.contains(
+                event.target
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        closeMobileSidebar();
+
+    }
+);
+
+
+/* =========================================================
+   MOBILE RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        if (!appContainer) {
+            return;
+        }
+
+
+        /*
+            وقتی از موبایل به دسکتاپ
+            برمی‌گردیم، حالت موبایل
+            Sidebar را پاک می‌کنیم.
+        */
+
+        if (
+            window.innerWidth > 768
+        ) {
+
+            appContainer.classList.remove(
+                "sidebar-collapsed"
+            );
+
+        }
+
+    }
+);
 
 
 /* =========================================================
@@ -1981,6 +2195,10 @@ if (voiceButton) {
 }
 
 
+/* =========================================================
+   MESSAGE INPUT
+========================================================= */
+
 if (messageInput) {
 
     messageInput.addEventListener(
@@ -1993,7 +2211,6 @@ if (messageInput) {
             ) {
 
                 event.preventDefault();
-
 
                 sendMessage();
 
@@ -2014,43 +2231,10 @@ if (messageInput) {
             this.style.height =
                 Math.min(
                     this.scrollHeight,
-                    140
+                    window.innerWidth <= 768
+                        ? 120
+                        : 140
                 ) + "px";
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SIDEBAR TOGGLE
-========================================================= */
-
-const sidebarToggle =
-    document.getElementById(
-        "sidebarToggle"
-    );
-
-
-const appContainer =
-    document.querySelector(
-        ".app-container"
-    );
-
-
-if (
-    sidebarToggle &&
-    appContainer
-) {
-
-    sidebarToggle.addEventListener(
-        "click",
-        () => {
-
-            appContainer.classList.toggle(
-                "sidebar-collapsed"
-            );
 
         }
     );
@@ -2065,21 +2249,21 @@ if (
 async function initializeBrain() {
 
     /*
-        اول وضعیت واقعی حساب را بخوان
+        Account
     */
 
     await loadAccountStatus();
 
 
     /*
-        سپس گفتگوها را بارگذاری کن
+        Conversations
     */
 
     await loadConversations();
 
 
     /*
-        در نهایت روی Input تمرکز کن
+        Focus input
     */
 
     if (messageInput) {
@@ -2091,8 +2275,8 @@ async function initializeBrain() {
 }
 
 
-/*
-    شروع برنامه
-*/
+/* =========================================================
+   START
+========================================================= */
 
 initializeBrain();

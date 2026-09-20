@@ -1,120 +1,23 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Create Account</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    <title>Create Account | Brain</title>
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-        }
+    <link
+        rel="stylesheet"
+        href="{% static 'brain/css/register.css' %}"
+    >
 
-        .register-container {
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
-        }
-
-        .register-box {
-            background: white;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-            color: #222;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #777;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 7px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: #555;
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #222;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-
-        button:hover {
-            background: #333;
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .message {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 14px;
-            min-height: 20px;
-        }
-
-        .login {
-            text-align: center;
-            margin-top: 25px;
-            color: #666;
-        }
-
-        .login a {
-            color: #222;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .login a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 
 <body>
@@ -123,148 +26,129 @@
 
     <div class="register-box">
 
+        <div class="brand">
+            🧠
+        </div>
+
         <h1>Create Account</h1>
 
         <p class="subtitle">
             Create your Brain account
         </p>
 
+
         <form id="registerForm">
 
             <div class="form-group">
-                <label for="username">Username</label>
+
+                <label for="username">
+                    Username
+                </label>
 
                 <input
                     type="text"
                     id="username"
                     name="username"
                     placeholder="Enter username"
+                    autocomplete="username"
                     required
                 >
+
             </div>
 
+
             <div class="form-group">
-                <label for="email">Email</label>
+
+                <label for="email">
+                    Email
+                </label>
 
                 <input
                     type="email"
                     id="email"
                     name="email"
                     placeholder="Enter email"
+                    autocomplete="email"
                     required
                 >
+
             </div>
 
+
             <div class="form-group">
-                <label for="password">Password</label>
+
+                <label for="password">
+                    Password
+                </label>
 
                 <input
                     type="password"
                     id="password"
                     name="password"
                     placeholder="Enter password"
+                    autocomplete="new-password"
                     required
                 >
+
             </div>
 
+
             <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
+
+                <label for="confirmPassword">
+                    Confirm Password
+                </label>
 
                 <input
                     type="password"
                     id="confirmPassword"
                     name="confirmPassword"
                     placeholder="Confirm password"
+                    autocomplete="new-password"
                     required
                 >
+
             </div>
 
-            <button type="submit" id="registerButton">
+
+            <button
+                type="submit"
+                id="registerButton">
+
                 Create Account
+
             </button>
 
-            <div id="message" class="message"></div>
+
+            <div
+                id="message"
+                class="message"
+                role="alert"
+                aria-live="polite">
+            </div>
 
         </form>
 
+
         <div class="login">
+
             Already have an account?
-            <a href="/login/">Login</a>
+
+            <a href="/login/">
+                Login
+            </a>
+
         </div>
 
     </div>
 
 </div>
 
-<script>
 
-const registerForm = document.getElementById("registerForm");
-const registerButton = document.getElementById("registerButton");
-const message = document.getElementById("message");
-
-registerForm.addEventListener("submit", async function(event) {
-
-    event.preventDefault();
-
-    const username = document.getElementById("username").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-
-    message.textContent = "";
-
-    if (password !== confirmPassword) {
-        message.textContent = "Passwords do not match.";
-        return;
-    }
-
-    registerButton.disabled = true;
-    registerButton.textContent = "Creating account...";
-
-    try {
-
-        const response = await fetch("/api/auth/register/", {
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            message.textContent = data.error || "Registration failed.";
-            return;
-        }
-
-        message.textContent = "Account created successfully!";
-
-        setTimeout(() => {
-            window.location.href = "/";
-        }, 800);
-
-    } catch (error) {
-
-        message.textContent =
-            "Something went wrong. Please try again.";
-
-    } finally {
-
-        registerButton.disabled = false;
-        registerButton.textContent = "Create Account";
-
-    }
-
-});
-
+<script
+    src="{% static 'brain/js/register.js' %}">
 </script>
 
 </body>
+
 </html>
