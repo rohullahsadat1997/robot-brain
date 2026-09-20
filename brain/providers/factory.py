@@ -12,6 +12,10 @@ from .deepgram_speech_provider import DeepgramSpeechProvider
 def get_ai_provider():
     provider_name = os.getenv("AI_PROVIDER", "test")
 
+    print("=== AI PROVIDER DEBUG ===")
+    print("AI_PROVIDER =", repr(provider_name))
+    print("OPENROUTER_API_KEY EXISTS =", bool(os.getenv("OPENROUTER_API_KEY")))
+
     if provider_name == "test":
         return TestProvider()
 
